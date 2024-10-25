@@ -3,14 +3,16 @@ import { ref } from "vue";
 import {
     Home,
     Users,
-    Settings,
-    HelpCircle,
     Moon,
     Sun,
     ChevronFirst,
     Computer,
     MessageCircle,
     DoorOpen,
+    BookOpenCheck,
+    ClipboardPenLine,
+    Receipt,
+    User,
 } from "lucide-vue-next";
 import { useRouter } from "vue-router";
 
@@ -22,8 +24,12 @@ const isDark = ref(false);
 const menuItems = [
     { icon: Home, text: "Dashboard", link: "/" },
     { icon: Users, text: "Docentes", link: "/docentes" },
+    { icon: ClipboardPenLine, text: "Asignaciones", link: "/asignaciones" },
+    { icon: BookOpenCheck, text: "Reservas", link: "/reservas" },
     { icon: Computer, text: "Equipos", link: "/equipos" },
+    { icon: Receipt, text: "Prestamos", link: "/prestamos" },
     { icon: DoorOpen, text: "Aulas", link: "/aulas" },
+    { icon: User, text: "Usuarios", link: "/usuarios" },
     { icon: MessageCircle, text: "Notificaciones", link: "/settings" },
 ];
 

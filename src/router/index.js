@@ -5,6 +5,11 @@ import Report from "@/views/Reports/ReportView.vue";
 import Docentes from "@/views/Docentes/DocentesView.vue";
 import Equipos from "@/views/Equipos/EquiposView.vue";
 import Aulas from "@/views/Aulas/AulasView.vue";
+import Reservas from "@/views/Reservas/ReservaView.vue";
+import Asignaciones from "@/views/Asignaciones/AsignacionesView.vue";
+import Prestamos from "@/views/Prestamos/PrestamosView.vue";
+import Usuarios from "@/views/Usuarios/UsuariosView.vue";
+
 /* inicio del manejador de rutas */
 
 const router = createRouter({
@@ -33,6 +38,26 @@ const router = createRouter({
           path: "/aulas",
           name: "aulas",
           component: Aulas,
+        },
+        {
+          path: "/reservas",
+          name: "reservas",
+          component: Reservas,
+        },
+        {
+          path: "/asignaciones",
+          name: "asignaciones",
+          component: Asignaciones,
+        },
+        {
+          path: "/prestamos",
+          name: "prestamos",
+          component: Prestamos,
+        },
+        {
+          path: "/usuarios",
+          name: "usuarios",
+          component: Usuarios,
         },
       ],
     },
