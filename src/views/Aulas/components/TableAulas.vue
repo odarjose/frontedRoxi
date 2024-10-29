@@ -1,7 +1,7 @@
 <template>
     <!-- component -->
-    <div class="p-6 overflow-scroll px-0">
-        <table class="mt-4 w-full min-w-max table-auto text-left">
+    <div class="p-6 overflow-scroll px-8">
+        <table class="mt-2 w-full min-w-max table-auto text-left">
             <thead>
                 <tr>
                     <th
@@ -32,7 +32,7 @@
                         class="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
                     >
                         <p
-                            class="antialiased font-sans text-sm text-blue-gray-900 flex items-center justify-between gap-2 font-normal leading-none opacity-70"
+                            class="antialiased font-sans text-sm text-white flex items-center justify-between gap-2 font-normal leading-none opacity-70"
                         >
                             EDIFICIO
                             <svg
@@ -57,7 +57,7 @@
                         class="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
                     >
                         <p
-                            class="antialiased font-sans text-sm text-blue-gray-900 flex items-center justify-between gap-2 font-normal leading-none opacity-70"
+                            class="antialiased font-sans text-sm text-white flex items-center justify-between gap-2 font-normal leading-none opacity-70"
                         >
                             ESTADO
                             <svg
@@ -81,7 +81,7 @@
                         class="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
                     >
                         <p
-                            class="antialiased font-sans text-sm text-blue-gray-900 flex items-center justify-between gap-2 font-bold leading-none opacity-70"
+                            class="antialiased font-sans text-sm text-white flex items-center justify-between gap-2 font-bold leading-none opacity-70"
                         >
                             PISO
                             <svg
@@ -105,7 +105,7 @@
                         class="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
                     >
                         <p
-                            class="antialiased font-bold text-sm text-blue-gray-900 flex items-center justify-between gap-2 leading-none opacity-70"
+                            class="antialiased font-bold text-sm text-white flex items-center justify-between gap-2 leading-none opacity-70"
                         >
                             ACCIONES
                         </p>
@@ -113,40 +113,34 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <tr
+                    v-for="aula in aulasPaginados"
+                    :key="aula.id"
+                    :data-id-edificio="aula.edificio_id"
+                >
                     <td class="p-4 border-b border-blue-gray-50">
                         <div class="flex items-center gap-3">
                             <div class="flex flex-col">
                                 <p
                                     class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal"
                                 >
-                                    React Project
-                                </p>
-                                <p
-                                    class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal opacity-70"
-                                >
-                                    Start date: 10 Dec 2023
+                                    {{ aula.nombre }}
                                 </p>
                             </div>
                         </div>
                     </td>
                     <td class="p-4 border-b border-blue-gray-50">
                         <div class="flex items-center gap-3">
-                            <img
+                            <!--<img
                                 src="https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg"
                                 alt="John Michael"
                                 class="inline-block relative object-cover object-center !rounded-full w-9 h-9"
-                            />
+                            />-->
                             <div class="flex flex-col">
                                 <p
                                     class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal"
                                 >
-                                    John Michael
-                                </p>
-                                <p
-                                    class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal opacity-70"
-                                >
-                                    john@creative-tim.com
+                                    {{ aula.edificio }}
                                 </p>
                             </div>
                         </div>
@@ -155,10 +149,10 @@
                     <td class="p-4 border-b border-blue-gray-50">
                         <div class="w-max">
                             <div
-                                class="relative grid items-center font-sans font-bold uppercase whitespace-nowrap select-none bg-green-500/20 text-green-600 py-1 px-2 text-xs rounded-md"
+                                class="relative grid items-center font-sans font-bold uppercase whitespace-nowrap select-none bg-yellow-300 text-green-600 py-1 px-2 text-xs rounded-md"
                                 style="opacity: 1"
                             >
-                                <span class="">Completed</span>
+                                <span class="">{{ aula.tipo }}</span>
                             </div>
                         </div>
                     </td>
@@ -166,13 +160,14 @@
                         <p
                             class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal"
                         >
-                            23/04/18
+                            {{ aula.piso }}
                         </p>
                     </td>
                     <td class="p-4 border-b border-blue-gray-50">
                         <button
                             class="relative align-middle select-none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-blue-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30"
                             type="button"
+                            @click="editarAula(aula)"
                         >
                             <span
                                 class="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2"
@@ -197,4 +192,65 @@
     </div>
 </template>
 
-<script></script>
+<script lang="ts">
+import { ref, computed, onMounted } from "vue";
+import { useAulaStore } from "../../../store/aulaStore";
+import type { Aulas } from "../../../types/InterfaceAulas";
+
+export default {
+    emits: ["editar-aula"],
+    setup(props, { emit }) {
+        const aulaStore = useAulaStore();
+        const searchQuery = ref("");
+        const currentPage = ref(1);
+        const aulasPerPage = ref(5);
+
+        onMounted(async () => {
+            await aulaStore.ListarAulas();
+        });
+
+        const filteredaula = computed(() => {
+            return aulaStore.aula.filter((aula) => {
+                // Convertir el contenido de búsqueda a minúsculas para hacer la búsqueda insensible a mayúsculas y minúsculas
+                const query = searchQuery.value.toLowerCase();
+
+                // Verificar si alguna propiedad del cliente incluye la consulta
+                return Object.values(aula).some((value) => {
+                    if (typeof value === "string") {
+                        return value.toLowerCase().includes(query);
+                    }
+                    return false;
+                });
+            });
+        });
+
+        const totalPages = computed(() => {
+            return Math.ceil(filteredaula.value.length / aulasPerPage.value);
+        });
+
+        const aulasPaginados = computed(() => {
+            const start = (currentPage.value - 1) * aulasPerPage.value;
+
+            const end = start + aulasPerPage.value;
+
+            return filteredaula.value.slice(start, end);
+        });
+
+        const editarAula = (aula: Aulas) => {
+            // Emitir un evento con los datos del programa a editar
+            emit("editar-aula", aula);
+        };
+
+        return {
+            aulaStore,
+            searchQuery,
+            filteredaula,
+            editarAula,
+            aulasPaginados,
+            totalPages,
+            currentPage,
+            aulasPerPage,
+        };
+    },
+};
+</script>
