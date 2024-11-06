@@ -1,4 +1,12 @@
 export interface Docentes {
+  nombre: String;
+  apellido: String;
+  dni: String;
+  fecha_nacimiento: Date;
+  email: String;
+  telefono: String;
+  direccion: String;
+  rol: String;
   id: number;
   idpersona: number;
   tipo_docencia: String;
@@ -19,7 +27,7 @@ export interface ListDocente {
   telefono: String;
   direccion: String;
   rol: String;
-  iddocente: number;
+  id: number;
   idpersona: number;
   tipo_docencia: String;
   tipo_contrato: String;

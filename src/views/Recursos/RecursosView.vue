@@ -6,87 +6,85 @@
             size="py-2.5 px-3 mr-3 rounded-full text-xs font-bold"
         />
         <Button
-            text="AGREGAR EQUIPOS"
+            text="AGREGAR RECURSOS"
             color="bg-cyan-300 text-gray-800 hover:text-black hover:bg-green-200"
             size="py-2.5 px-4 mr-3 rounded-full text-justify text-xs font-bold"
             icon="fas fa-user-plus"
             @click="openModal"
         />
     </div>
-    <FormModalEquipos
+
+    <FormModalRecursos
         v-if="showModal"
         :key="modalKey"
-        :equipo-editar="equiposEditar"
+        :categoria-editar="recursoEditar"
         :show-modal="showModal"
         @update:show-modal="showModal = $event"
         @guardar="onGuardar"
         ref="modal"
     />
-    <TableEquipos @editar-equipos="editarEquipos" />
+
+    <div class="pt-4">
+        <TableRecursos @editar-recursos="editarRecurso" />
+    </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, nextTick, ref, onMounted } from "vue";
-import TableEquipos from "./components/TableEquipos.vue";
-
+import { defineComponent, ref, onMounted } from "vue";
+import TableRecursos from "./components/TableRecursos.vue";
 import Button from "../../components/Button/ButtonComponnet.vue";
-import FormModalEquipos from "./components/FormModalEquipos.vue";
-
-import { useEquipoStore } from "../../store/equiposStore";
-import { Equipos } from "../../types/InterfaceEquipos";
+import FormModalRecursos from "./components/FormModalRecursos.vue";
+import { useRecursosStore } from "../../store/recursosStore";
+import type { ListRecursos } from "../../types/InterfaceAulas";
 
 export default defineComponent({
-    name: "EquiposView",
+    name: "ReportesView",
     components: {
         // eslint-disable-next-line vue/no-reserved-component-names
         Button,
-        TableEquipos,
-        FormModalEquipos,
+        TableRecursos,
+        FormModalRecursos,
     },
     setup() {
-        const equipoStore = useEquipoStore();
+        const recursosStore = useRecursosStore();
         const modal = ref(null);
         const showModal = ref(false);
         const modalKey = ref(0);
-        const equiposEditar = ref<Equipos | null>(null);
+        const recursoEditar = ref<ListRecursos | null>(null);
 
         const openModal = () => {
-            equiposEditar.value = null;
+            recursoEditar.value = null;
             showModal.value = true;
             modalKey.value++; // Forzar re-render del modal
         };
-
         const closeModal = () => {
             showModal.value = false;
-            equiposEditar.value = null;
+            recursoEditar.value = null;
         };
-
-        const editarEquipos = async (equipos: Equipos) => {
-            equiposEditar.value = JSON.parse(JSON.stringify(equipos));
-            await nextTick();
+        const editarRecurso = (recurso: ListRecursos) => {
+            recursoEditar.value = JSON.parse(JSON.stringify(recurso));
             showModal.value = true;
-            modalKey.value++; // Forzar re-render del modal si es necesario
+            modalKey.value++;
         };
 
-        const onGuardar = async (equipos: Equipos) => {
+        const onGuardar = async (recurso: ListRecursos) => {
             try {
-                if (equipos.id) {
-                    await equipoStore.UpdatEquipos(equipos);
+                if (recurso.id) {
+                    await recursosStore.UpdatRecursos(recurso);
                 } else {
-                    await equipoStore.AddEquipos(equipos);
+                    await recursosStore.AddRecursos(recurso);
                 }
                 closeModal();
-                await equipoStore.ListarEquipos();
+                await recursosStore.ListarRecursos();
             } catch (error) {
-                console.error("Error al guardar el aula: ", error);
+                console.error("Error al guardar el recurso: ", error);
             }
         };
-
         onMounted(async () => {
             try {
-                await equipoStore.ListarEquipos();
+                await recursosStore.ListarRecursos();
             } catch (error) {
-                console.error("Error al cargar las categorias");
+                console.error("Error al cargar los recursos");
             }
         });
 
@@ -94,9 +92,9 @@ export default defineComponent({
             modal,
             showModal,
             modalKey,
-            equiposEditar,
+            recursoEditar,
             openModal,
-            editarEquipos,
+            editarRecurso,
             onGuardar,
         };
     },

@@ -9,7 +9,8 @@ import Reservas from "@/views/Reservas/ReservaView.vue";
 import Asignaciones from "@/views/Asignaciones/AsignacionesView.vue";
 import Prestamos from "@/views/Prestamos/PrestamosView.vue";
 import Usuarios from "@/views/Usuarios/UsuariosView.vue";
-
+import Categorias from "@/views/Categorias/CategoriasViews.vue";
+import Recursos from "../views/Recursos/RecursosView.vue";
 /* inicio del manejador de rutas */
 
 const router = createRouter({
@@ -58,6 +59,16 @@ const router = createRouter({
           path: "/usuarios",
           name: "usuarios",
           component: Usuarios,
+        },
+        {
+          path: "/categorias",
+          name: "categorias",
+          component: Categorias,
+        },
+        {
+          path: "/recursos",
+          name: "recursos",
+          component: Recursos,
         },
       ],
     },

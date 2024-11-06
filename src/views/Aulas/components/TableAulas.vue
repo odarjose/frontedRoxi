@@ -131,11 +131,6 @@
                     </td>
                     <td class="p-4 border-b border-blue-gray-50">
                         <div class="flex items-center gap-3">
-                            <!--<img
-                                src="https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg"
-                                alt="John Michael"
-                                class="inline-block relative object-cover object-center !rounded-full w-9 h-9"
-                            />-->
                             <div class="flex flex-col">
                                 <p
                                     class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal"

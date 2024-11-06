@@ -13,3 +13,17 @@ export interface Edificios {
   nombre: String;
   direccion: String;
 }
+
+export interface ListRecursos {
+  id: number;
+  aula_id: number;
+  aula: String;
+  recurso: String;
+  cantidad: number;
+}
+export interface Recursos {
+  id: number;
+  aula_id: number;
+  nombre: String;
+  cantidad: number;
+}

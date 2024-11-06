@@ -4,8 +4,22 @@ export interface Equipos {
   marca: String;
   modelo: String;
   numero_serie: String;
-  anio_adquicision: number;
+  anio_adquisicion: number;
   estado: String;
+  categoria_id: number;
+  asignado_a: number;
+  ubicacion: String;
+}
+export interface ListEquipos {
+  id: number;
+  nombre: String;
+  marca: String;
+  modelo: String;
+  numero_serie: String;
+  anio_adquisicion: number;
+  estado: String;
+  categoria: String;
+  docente: String;
   categoria_id: number;
   asignado_a: number;
   ubicacion: String;

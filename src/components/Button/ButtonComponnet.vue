@@ -1,81 +1,47 @@
+<!-- CustomButton.vue -->
 <template>
-    <button
-        :class="[
-            'btn',
-            buttonClass,
-            responsiveSizeClass,
-            tailwindClasses,
-            'mr-5',
-            'flex',
-            'items-center',
-        ]"
-        @click="handleClick"
-    >
-        <i v-if="icon" :class="[icon, iconSizeClass, 'mr-2']"></i>
-        {{ label }}
+    <button :class="buttonClasses" type="button" @click="handleClick">
+        <span v-if="icon" class="mr-2">
+            <i :class="icon"></i>
+        </span>
+        {{ text }}
     </button>
 </template>
 
 <script>
 export default {
+    name: "CustomButton",
     props: {
-        label: {
+        text: {
             type: String,
-            default: "Button",
-        },
-        customClass: {
-            type: String,
-            default: "",
+            required: true,
         },
         color: {
             type: String,
-            default: "bg-green-500",
-        },
-        textColor: {
-            type: String,
-            default: "text-white",
+            default: "bg-slate-800 text-white", // Color por defecto
         },
         size: {
-            type: Object,
-            default: () => ({ base: "sm", sm: "sm", md: "md", lg: "lg" }),
+            type: String,
+            default: "py-2.5 px-3", // Tamaño por defecto
         },
         icon: {
             type: String,
-            default: "",
+            default: null, // Icono por defecto
         },
-        iconSize: {
-            type: String,
-            default: "",
+    },
+    computed: {
+        buttonClasses() {
+            return `${this.color} ${this.size} rounded transition-all hover:opacity-75 focus:ring focus:ring-slate-300 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none`;
         },
     },
     methods: {
         handleClick() {
-            // Emitimos un evento para abrir el modal
-            this.$emit("open-modal");
-        },
-    },
-    computed: {
-        responsiveSizeClass() {
-            return {
-                [`btn-${this.size.base}`]: true,
-                [`sm:btn-${this.size.sm}`]: this.size.sm,
-                [`md:btn-${this.size.md}`]: this.size.md,
-                [`lg:btn-${this.size.lg}`]: this.size.lg,
-            };
-        },
-        tailwindClasses() {
-            return `${this.color} ${this.textColor}`;
-        },
-        buttonClass() {
-            return this.customClass;
-        },
-        iconSizeClass() {
-            return this.iconSize || `fa-${this.size.base}`;
+            this.$emit("click");
         },
     },
 };
 </script>
 
 <style scoped>
-/* Estilos adicionales si es necesario */
+/* Puedes agregar estilos adicionales aquí si es necesario */
 </style>

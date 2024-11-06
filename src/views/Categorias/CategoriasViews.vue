@@ -6,77 +6,79 @@
             size="py-2.5 px-3 mr-3 rounded-full text-xs font-bold"
         />
         <Button
-            text="AGREGAR EQUIPOS"
+            text="AGREGAR CATEGORIAS"
             color="bg-cyan-300 text-gray-800 hover:text-black hover:bg-green-200"
             size="py-2.5 px-4 mr-3 rounded-full text-justify text-xs font-bold"
             icon="fas fa-user-plus"
             @click="openModal"
         />
     </div>
-    <FormModalEquipos
+    <FormModalCategory
         v-if="showModal"
         :key="modalKey"
-        :equipo-editar="equiposEditar"
+        :categoria-editar="categoriaEditar"
         :show-modal="showModal"
         @update:show-modal="showModal = $event"
         @guardar="onGuardar"
         ref="modal"
     />
-    <TableEquipos @editar-equipos="editarEquipos" />
+
+    <div class="pt-4">
+        <TableCategory @editar-categoria="editarCategoria" />
+    </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, nextTick, ref, onMounted } from "vue";
-import TableEquipos from "./components/TableEquipos.vue";
-
+import { defineComponent, ref, onMounted } from "vue";
+import TableCategory from "./component/TableCategory.vue";
 import Button from "../../components/Button/ButtonComponnet.vue";
-import FormModalEquipos from "./components/FormModalEquipos.vue";
+import FormModalCategory from "./component/FormModalCategory.vue";
 
-import { useEquipoStore } from "../../store/equiposStore";
-import { Equipos } from "../../types/InterfaceEquipos";
+import { useCategoriaStore } from "../../store/categoriaStore";
+
+import type { Categorias } from "../../types/InterfaceEquipos";
 
 export default defineComponent({
-    name: "EquiposView",
+    name: "ExamenesView",
     components: {
         // eslint-disable-next-line vue/no-reserved-component-names
         Button,
-        TableEquipos,
-        FormModalEquipos,
+        TableCategory,
+        FormModalCategory,
     },
     setup() {
-        const equipoStore = useEquipoStore();
+        const categoriaStore = useCategoriaStore();
         const modal = ref(null);
         const showModal = ref(false);
         const modalKey = ref(0);
-        const equiposEditar = ref<Equipos | null>(null);
+        const categoriaEditar = ref<Categorias | null>(null);
 
         const openModal = () => {
-            equiposEditar.value = null;
+            categoriaEditar.value = null;
             showModal.value = true;
             modalKey.value++; // Forzar re-render del modal
         };
 
         const closeModal = () => {
             showModal.value = false;
-            equiposEditar.value = null;
+            categoriaEditar.value = null;
         };
 
-        const editarEquipos = async (equipos: Equipos) => {
-            equiposEditar.value = JSON.parse(JSON.stringify(equipos));
-            await nextTick();
+        const editarCategoria = (examen: Categorias) => {
+            categoriaEditar.value = JSON.parse(JSON.stringify(examen));
             showModal.value = true;
-            modalKey.value++; // Forzar re-render del modal si es necesario
+            modalKey.value++;
         };
 
-        const onGuardar = async (equipos: Equipos) => {
+        const onGuardar = async (categoria: Categorias) => {
             try {
-                if (equipos.id) {
-                    await equipoStore.UpdatEquipos(equipos);
+                if (categoria.id) {
+                    await categoriaStore.UpdatCategorias(categoria);
                 } else {
-                    await equipoStore.AddEquipos(equipos);
+                    await categoriaStore.AddCategorias(categoria);
                 }
                 closeModal();
-                await equipoStore.ListarEquipos();
+                await categoriaStore.ListarCategorias();
             } catch (error) {
                 console.error("Error al guardar el aula: ", error);
             }
@@ -84,7 +86,7 @@ export default defineComponent({
 
         onMounted(async () => {
             try {
-                await equipoStore.ListarEquipos();
+                await categoriaStore.ListarCategorias();
             } catch (error) {
                 console.error("Error al cargar las categorias");
             }
@@ -94,9 +96,9 @@ export default defineComponent({
             modal,
             showModal,
             modalKey,
-            equiposEditar,
+            categoriaEditar,
             openModal,
-            editarEquipos,
+            editarCategoria,
             onGuardar,
         };
     },

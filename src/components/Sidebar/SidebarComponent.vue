@@ -13,6 +13,7 @@ import {
     ClipboardPenLine,
     Receipt,
     User,
+    Boxes,
 } from "lucide-vue-next";
 import { useRouter } from "vue-router";
 
@@ -27,6 +28,7 @@ const menuItems = [
     { icon: ClipboardPenLine, text: "Asignaciones", link: "/asignaciones" },
     { icon: BookOpenCheck, text: "Reservas", link: "/reservas" },
     { icon: Computer, text: "Equipos", link: "/equipos" },
+    { icon: Boxes, text: "Categorias", link: "/categorias" },
     { icon: Receipt, text: "Prestamos", link: "/prestamos" },
     { icon: DoorOpen, text: "Aulas", link: "/aulas" },
     { icon: User, text: "Usuarios", link: "/usuarios" },

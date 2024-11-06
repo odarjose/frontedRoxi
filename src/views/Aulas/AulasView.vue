@@ -1,24 +1,48 @@
 <template>
-    <div class="flex justify-end pt-4">
-        <Button
-            label="Importar"
-            customClass="btn-info"
-            color=""
-            text-color="text-black"
-            icon="fa-solid fa-file-import"
-            :size="{ base: 'sm', sm: 'md', md: 'lg', lg: 'md' }"
-        />
-        <Button
-            label="Agregar Aulas"
-            customClass="btn-success"
-            color="bg-green-500"
-            text-color="text-black"
-            :size="{ base: 'sm', sm: 'md', md: 'lg', lg: 'md' }"
-            @open-modal="openModal"
-        />
-    </div>
+    <div class="flex justify-between w-full pt-4">
+        <div class="flex">
+            <Button
+                text="IMPORTAR"
+                color="border border-slate-300 text-slate-600"
+                size="py-2.5 px-3 mr-3 rounded-full px-4 text-xs font-bold"
+            />
+        </div>
 
-    <ModalFormAula
+        <div class="flex">
+            <Button
+                text="SECCIONES"
+                color="bg-cyan-300 text-gray-800 hover:text-black hover:bg-green-200"
+                size="py-2.5 px-4 mr-3 rounded-full text-justify text-xs font-bold"
+                icon="fas fa-user-plus"
+                class="mr-2"
+                @click="openModal"
+            />
+            <Button
+                text="EDIFICIOS"
+                color="bg-cyan-300 text-gray-800 hover:text-black hover:bg-green-200"
+                size="py-2.5 px-4 mr-3 rounded-full text-justify text-xs font-bold"
+                icon="fas fa-user-plus"
+                class="mr-2"
+                @click="openModal"
+            />
+            <Button
+                text="RECURSOS"
+                color="bg-cyan-300 text-gray-800 hover:text-black hover:bg-green-200"
+                size="py-2.5 px-4 mr-3 rounded-full text-justify text-xs font-bold"
+                icon="fas fa-user-plus"
+                class="mr-2"
+                @click="navigateToRecursos"
+            />
+            <Button
+                text="AGREGAR AULAS"
+                color="bg-cyan-300 text-gray-800 hover:text-black hover:bg-green-200"
+                size="py-2.5 px-4 mr-3 rounded-full text-justify text-xs font-bold"
+                icon="fas fa-user-plus"
+                @click="openModal"
+            />
+        </div>
+    </div>
+    <FormModalRecursos
         v-if="showModal"
         :key="modalKey"
         :aula-editar="aulaEditar"
@@ -32,10 +56,11 @@
 </template>
 
 <script lang="ts">
+import { useRouter } from "vue-router";
 import { defineComponent, ref, onMounted } from "vue";
 import TableAulas from "./components/TableAulas.vue";
 import Button from "../../components/Button/ButtonComponnet.vue";
-import ModalFormAula from "./components/ModalFormAula.vue";
+import FormModalRecursos from "../Recursos/components/FormModalRecursos.vue";
 
 import { useAulaStore } from "../../store/aulaStore";
 import type { Aulas } from "../../types/InterfaceAulas";
@@ -46,7 +71,7 @@ export default defineComponent({
         // eslint-disable-next-line vue/no-reserved-component-names
         Button,
         TableAulas,
-        ModalFormAula,
+        FormModalRecursos,
     },
     setup() {
         const aulaStore = useAulaStore();
@@ -54,6 +79,11 @@ export default defineComponent({
         const showModal = ref(false);
         const modalKey = ref(0);
         const aulaEditar = ref<Aulas | null>(null);
+
+        const router = useRouter();
+        const navigateToRecursos = () => {
+            router.push({ name: "recursos" }); // Redirige a la ruta 'home'
+        };
 
         const openModal = () => {
             aulaEditar.value = null;
@@ -96,6 +126,7 @@ export default defineComponent({
 
         return {
             modal,
+            navigateToRecursos,
             showModal,
             modalKey,
             aulaEditar,
