@@ -42,7 +42,7 @@
             />
         </div>
     </div>
-    <FormModalRecursos
+    <ModalFormAula
         v-if="showModal"
         :key="modalKey"
         :aula-editar="aulaEditar"
@@ -60,7 +60,7 @@ import { useRouter } from "vue-router";
 import { defineComponent, ref, onMounted } from "vue";
 import TableAulas from "./components/TableAulas.vue";
 import Button from "../../components/Button/ButtonComponnet.vue";
-import FormModalRecursos from "../Recursos/components/FormModalRecursos.vue";
+import ModalFormAula from "./components/ModalFormAula.vue";
 
 import { useAulaStore } from "../../store/aulaStore";
 import type { Aulas } from "../../types/InterfaceAulas";
@@ -71,7 +71,7 @@ export default defineComponent({
         // eslint-disable-next-line vue/no-reserved-component-names
         Button,
         TableAulas,
-        FormModalRecursos,
+        ModalFormAula,
     },
     setup() {
         const aulaStore = useAulaStore();
