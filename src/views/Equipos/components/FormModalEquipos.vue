@@ -119,7 +119,7 @@ import {
 
 import FormModal from "../../../components/Form/FormModal.vue";
 
-import type { Equipos } from "../../../types/InterfaceEquipos";
+import type { Equipos, ListEquipos } from "../../../types/InterfaceEquipos";
 import { useEquipoStore } from "../../../store/equiposStore";
 import { useDocenteStore } from "../../../store/docenteStore";
 import { useCategoriaStore } from "../../../store/categoriaStore";
@@ -131,7 +131,7 @@ export default defineComponent({
     },
     props: {
         equiposEditar: {
-            type: Object as () => Equipos | null,
+            type: Object as () => ListEquipos | null,
             default: null,
         },
         showModal: {
@@ -145,8 +145,10 @@ export default defineComponent({
         const wizardModal = ref(null);
         const isReady = ref(false);
         const dataCargada = ref(false);
-        const equipoLocal = ref<Equipos>({
+        const equipoLocal = ref<ListEquipos>({
             id: 0,
+            docente: "",
+            categoria: "",
             nombre: "",
             marca: "",
             modelo: "",
@@ -166,6 +168,8 @@ export default defineComponent({
         const resetForm = () => {
             equipoLocal.value = {
                 id: 0,
+                docente: "",
+                categoria: "",
                 nombre: "",
                 marca: "",
                 modelo: "",

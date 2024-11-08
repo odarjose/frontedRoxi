@@ -14,12 +14,12 @@ export const useRecursosStore = defineStore("recursos", () => {
   };
 
   // insert examen
-  const AddRecursos = async (nuevorecurso: ListRecursos) => {
+  const AddRecursos = async (nuevorecurso: Recursos) => {
     await recursosService.addRecursos(nuevorecurso);
     await ListarRecursos();
   };
 
-  const UpdatRecursos = async (actualizarrecurso: ListRecursos) => {
+  const UpdatRecursos = async (actualizarrecurso: Recursos) => {
     await recursosService.updateRecursos(actualizarrecurso);
     await ListarRecursos();
   };

@@ -7,12 +7,12 @@ export default {
     const response = await axios.get<ListRecursos[]>(`${baseURL}/ra/on`);
     return response.data;
   },
-  async addRecursos(aulas: ListRecursos) {
+  async addRecursos(aulas: Recursos) {
     const response = await axios.post(`${baseURL}/ra/in`, aulas);
     return response.data;
   },
 
-  async updateRecursos(aulas: ListRecursos) {
+  async updateRecursos(aulas: Recursos) {
     const response = await axios.put(`${baseURL}/ra/up/${aulas.id}`, aulas);
     return response.data;
   },

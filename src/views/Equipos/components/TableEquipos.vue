@@ -136,7 +136,7 @@ export default {
             return filtereequipo.value.slice(start, end);
         });
 
-        const editarEquipos = (equipos: Equipos) => {
+        const editarEquipos = (equipos: ListEquipos) => {
             // Emitir un evento con los datos del programa a editar|
 
             emit("editar-equipos", equipos);

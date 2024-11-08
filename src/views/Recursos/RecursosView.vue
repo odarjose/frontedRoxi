@@ -17,7 +17,7 @@
     <FormModalRecursos
         v-if="showModal"
         :key="modalKey"
-        :categoria-editar="recursoEditar"
+        :recurso-editar="recursoEditar"
         :show-modal="showModal"
         @update:show-modal="showModal = $event"
         @guardar="onGuardar"
@@ -35,7 +35,7 @@ import TableRecursos from "./components/TableRecursos.vue";
 import Button from "../../components/Button/ButtonComponnet.vue";
 import FormModalRecursos from "./components/FormModalRecursos.vue";
 import { useRecursosStore } from "../../store/recursosStore";
-import type { ListRecursos } from "../../types/InterfaceAulas";
+import type { Recursos } from "../../types/InterfaceAulas";
 
 export default defineComponent({
     name: "ReportesView",
@@ -50,7 +50,7 @@ export default defineComponent({
         const modal = ref(null);
         const showModal = ref(false);
         const modalKey = ref(0);
-        const recursoEditar = ref<ListRecursos | null>(null);
+        const recursoEditar = ref<Recursos | null>(null);
 
         const openModal = () => {
             recursoEditar.value = null;
@@ -61,13 +61,13 @@ export default defineComponent({
             showModal.value = false;
             recursoEditar.value = null;
         };
-        const editarRecurso = (recurso: ListRecursos) => {
+        const editarRecurso = (recurso: Recursos) => {
             recursoEditar.value = JSON.parse(JSON.stringify(recurso));
             showModal.value = true;
             modalKey.value++;
         };
 
-        const onGuardar = async (recurso: ListRecursos) => {
+        const onGuardar = async (recurso: Recursos) => {
             try {
                 if (recurso.id) {
                     await recursosStore.UpdatRecursos(recurso);

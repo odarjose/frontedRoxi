@@ -38,7 +38,7 @@
                             </option>
                         </select>
                         <input
-                            v-model="recursoLocal.nombre"
+                            v-model="recursoLocal.recurso"
                             placeholder="nombre"
                             class="input input-bordered input-success w-full"
                         />
@@ -66,8 +66,8 @@ import {
 } from "vue";
 import FormModal from "../../../components/Form/FormModal.vue";
 
-import type { Recursos, ListRecursos } from "../../../types/InterfaceAulas";
-import { useRecursosStore } from "../../../store/recursosStore";
+import type { ListRecursos } from "../../../types/InterfaceAulas";
+
 import { useAulaStore } from "../../../store/aulaStore";
 
 export default defineComponent({
@@ -77,7 +77,7 @@ export default defineComponent({
     },
     props: {
         recursoEditar: {
-            type: Object as () => Recursos | null,
+            type: Object as () => ListRecursos | null,
             default: null,
         },
         showModal: {
@@ -93,10 +93,12 @@ export default defineComponent({
         const wizardModal = ref(null);
         const isReady = ref(false);
         const dataCargada = ref(false);
-        const recursoLocal = ref<Recursos>({
+        const recursoLocal = ref<ListRecursos>({
             id: 0,
             aula_id: 0,
-            nombre: "",
+            aula: "",
+            recurso: "",
+
             cantidad: 0,
         });
 
@@ -107,7 +109,9 @@ export default defineComponent({
             recursoLocal.value = {
                 id: 0,
                 aula_id: 0,
-                nombre: "",
+                aula: "",
+                recurso: "",
+
                 cantidad: 0,
             };
         };

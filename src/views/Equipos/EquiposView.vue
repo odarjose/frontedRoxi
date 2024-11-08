@@ -16,7 +16,7 @@
     <FormModalEquipos
         v-if="showModal"
         :key="modalKey"
-        :equipo-editar="equiposEditar"
+        :equipos-editar="equiposEditar"
         :show-modal="showModal"
         @update:show-modal="showModal = $event"
         @guardar="onGuardar"
@@ -33,7 +33,7 @@ import Button from "../../components/Button/ButtonComponnet.vue";
 import FormModalEquipos from "./components/FormModalEquipos.vue";
 
 import { useEquipoStore } from "../../store/equiposStore";
-import { Equipos } from "../../types/InterfaceEquipos";
+import { Equipos, ListEquipos } from "../../types/InterfaceEquipos";
 
 export default defineComponent({
     name: "EquiposView",
@@ -48,7 +48,7 @@ export default defineComponent({
         const modal = ref(null);
         const showModal = ref(false);
         const modalKey = ref(0);
-        const equiposEditar = ref<Equipos | null>(null);
+        const equiposEditar = ref<ListEquipos | null>(null);
 
         const openModal = () => {
             equiposEditar.value = null;
@@ -61,14 +61,14 @@ export default defineComponent({
             equiposEditar.value = null;
         };
 
-        const editarEquipos = async (equipos: Equipos) => {
+        const editarEquipos = async (equipos: ListEquipos) => {
             equiposEditar.value = JSON.parse(JSON.stringify(equipos));
             await nextTick();
             showModal.value = true;
             modalKey.value++; // Forzar re-render del modal si es necesario
         };
 
-        const onGuardar = async (equipos: Equipos) => {
+        const onGuardar = async (equipos: ListEquipos) => {
             try {
                 if (equipos.id) {
                     await equipoStore.UpdatEquipos(equipos);
