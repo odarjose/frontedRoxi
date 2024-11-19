@@ -6,7 +6,7 @@
             size="py-2.5 px-3 mr-3 rounded-full text-xs font-bold"
         />
         <Button
-            text="REGISTRAR PRESTAMOS"
+            text="AGREGAR EDIFICIOS"
             color="bg-cyan-300 text-gray-800 hover:text-black hover:bg-green-200"
             size="py-2.5 px-4 mr-3 rounded-full text-justify text-xs font-bold"
             icon="fas fa-user-plus"
@@ -14,79 +14,78 @@
         />
     </div>
 
-    <FormModalPrestamo
+    <FormModalEdificios
         v-if="showModal"
         :key="modalKey"
-        :prestamos-editar="prestamosEditar"
+        :edificio-editar="edificioEditar"
         :show-modal="showModal"
         @update:show-modal="showModal = $event"
         @guardar="onGuardar"
         ref="modal"
     />
-
-    <TablePrestamo @editar-prestamo="editarPrestamo" />
+    <div>
+        <TableEdificios @editar-edificio="editarEdificio" />
+    </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, onMounted } from "vue";
-import TablePrestamo from "./components/TablePrestamo.vue";
+
+import TableEdificios from "./components/TableEdificios.vue";
 import Button from "../../components/Button/ButtonComponnet.vue";
+import FormModalEdificios from "./components/FormModalEdificios.vue";
 
-import FormModalPrestamo from "./components/FormModalPrestamo.vue";
+import { useEdificioStore } from "../../store/edificioStore";
 
-import { usePrestamoStore } from "../../store/prestamosStore";
-import type { Prestamos, ListPrestamos } from "../../types/InterfaceEquipos";
+import type { Edificios } from "../../types/InterfaceAulas";
 
 export default defineComponent({
-    name: "ReservasViews",
+    name: "EdificiosViews",
     components: {
-        TablePrestamo,
+        FormModalEdificios,
         Button,
-        FormModalPrestamo,
+        TableEdificios,
     },
     setup() {
-        const prestamoStore = usePrestamoStore();
+        const edificioStore = useEdificioStore();
         const modal = ref(null);
         const showModal = ref(false);
         const modalKey = ref(0);
-        const prestamosEditar = ref<Prestamos | null>(null);
+        const edificioEditar = ref<Edificios | null>(null);
 
         const openModal = () => {
-            prestamosEditar.value = null;
+            edificioEditar.value = null;
             showModal.value = true;
             modalKey.value++;
         };
         const closeModal = () => {
             showModal.value = false;
-            prestamosEditar.value = null;
+            edificioEditar.value = null;
         };
-        const editarPrestamo = (prestamo: Prestamos) => {
-            prestamosEditar.value = JSON.parse(JSON.stringify(prestamo));
+        const editarEdificio = (edificio: Edificios) => {
+            edificioEditar.value = JSON.parse(JSON.stringify(edificio));
             showModal.value = true;
             modalKey.value++;
         };
-
-        const onGuardar = async (prestamo: Prestamos) => {
+        const onGuardar = async (edifico: Edificios) => {
             try {
-                if (prestamo.id) {
-                    await prestamoStore.UpdatePrestamo(prestamo);
+                if (edifico.id) {
+                    await edificioStore.UpdatEdificios(edifico);
                 } else {
-                    await prestamoStore.AddPrestamo(prestamo);
+                    await edificioStore.AddEdificios(edifico);
                 }
                 closeModal();
-                await prestamoStore.ListarPrestamos();
+                await edificioStore.ListarEdificios();
             } catch (error) {
-                console.error("Error al registrar la reserva: ", error);
+                console.error("Error al guardar el aula: ", error);
             }
         };
 
         onMounted(async () => {
             try {
-                await prestamoStore.ListarPrestamos();
+                await edificioStore.ListarEdificios();
             } catch (error) {
-                console.error(
-                    "Error al cargar el listado de los prestamos del equipo",
-                );
+                console.error("Error al cargar las edificios");
             }
         });
 
@@ -94,9 +93,9 @@ export default defineComponent({
             modal,
             showModal,
             modalKey,
-            prestamosEditar,
+            edificioEditar,
             openModal,
-            editarPrestamo,
+            editarEdificio,
             onGuardar,
         };
     },

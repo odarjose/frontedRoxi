@@ -84,45 +84,40 @@
                                     <th
                                         class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
                                     >
-                                        NOMBRE
+                                        USUARIO
                                     </th>
                                     <th
                                         class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
                                     >
                                         ROL
                                     </th>
-                                    <th
-                                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
-                                    >
-                                        USUARIO
-                                    </th>
+
                                     <th
                                         class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
                                     >
                                         ESTADO
                                     </th>
+                                    <th
+                                        class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                                    >
+                                        ACCIONES
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                <tr
+                                    v-for="usuarios in usuariosPaginados"
+                                    :key="usuarios.id"
+                                >
                                     <td
                                         class="px-5 py-5 border-b border-gray-200 bg-white text-sm"
                                     >
                                         <div class="flex items-center">
-                                            <div
-                                                class="flex-shrink-0 w-10 h-10"
-                                            >
-                                                <img
-                                                    class="w-full h-full rounded-full"
-                                                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&w=160&h=160&q=80"
-                                                    alt=""
-                                                />
-                                            </div>
                                             <div class="ml-3">
                                                 <p
                                                     class="text-gray-900 whitespace-no-wrap"
                                                 >
-                                                    Vera Carpenter
+                                                    {{ usuarios.usuario }}
                                                 </p>
                                             </div>
                                         </div>
@@ -133,18 +128,10 @@
                                         <p
                                             class="text-gray-900 whitespace-no-wrap"
                                         >
-                                            Admin
+                                            {{ usuarios.rol }}
                                         </p>
                                     </td>
-                                    <td
-                                        class="px-5 py-5 border-b border-gray-200 bg-white text-sm"
-                                    >
-                                        <p
-                                            class="text-gray-900 whitespace-no-wrap"
-                                        >
-                                            Jan 21, 2020
-                                        </p>
-                                    </td>
+
                                     <td
                                         class="px-5 py-5 border-b border-gray-200 bg-white text-sm"
                                     >
@@ -155,8 +142,35 @@
                                                 aria-hidden
                                                 class="absolute inset-0 bg-green-200 opacity-50 rounded-full"
                                             ></span>
-                                            <span class="relative">Activo</span>
+                                            <span class="relative">{{
+                                                usuarios.estado
+                                            }}</span>
                                         </span>
+                                    </td>
+                                    <td
+                                        class="px-5 py-5 border-b border-gray-200 bg-white text-sm"
+                                    >
+                                        <button
+                                            class="relative align-middle select-none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-blue-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30"
+                                            type="button"
+                                            @click="editarUsuarios(usuarios)"
+                                        >
+                                            <span
+                                                class="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2"
+                                            >
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 24 24"
+                                                    fill="currentColor"
+                                                    aria-hidden="true"
+                                                    class="h-4 w-4"
+                                                >
+                                                    <path
+                                                        d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z"
+                                                    ></path>
+                                                </svg>
+                                            </span>
+                                        </button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -167,3 +181,66 @@
         </div>
     </body>
 </template>
+
+<script lang="ts">
+import { ref, computed, onMounted } from "vue";
+import { useUsuarioStore } from "../../../store/usuarioStore";
+import type { Usuario } from "../../../types/InterfaceUsuarios";
+
+export default {
+    emits: ["editar-usuario"],
+    setup(props, { emit }) {
+        const usuarioStore = useUsuarioStore();
+        const searchQuery = ref("");
+        const currentPage = ref(1);
+        const aulasPerPage = ref(5);
+
+        onMounted(async () => {
+            await usuarioStore.ListarUsuarios();
+        });
+
+        const filteredaula = computed(() => {
+            return usuarioStore.usuario.filter((aula) => {
+                // Convertir el contenido de búsqueda a minúsculas para hacer la búsqueda insensible a mayúsculas y minúsculas
+                const query = searchQuery.value.toLowerCase();
+
+                // Verificar si alguna propiedad del cliente incluye la consulta
+                return Object.values(aula).some((value) => {
+                    if (typeof value === "string") {
+                        return value.toLowerCase().includes(query);
+                    }
+                    return false;
+                });
+            });
+        });
+
+        const totalPages = computed(() => {
+            return Math.ceil(filteredaula.value.length / aulasPerPage.value);
+        });
+
+        const usuariosPaginados = computed(() => {
+            const start = (currentPage.value - 1) * aulasPerPage.value;
+
+            const end = start + aulasPerPage.value;
+
+            return filteredaula.value.slice(start, end);
+        });
+
+        const editarUsuarios = (usuario: Usuario) => {
+            // Emitir un evento con los datos del programa a editar
+            emit("editar-usuario", usuario);
+        };
+
+        return {
+            usuarioStore,
+            searchQuery,
+            filteredaula,
+            editarUsuarios,
+            usuariosPaginados,
+            totalPages,
+            currentPage,
+            aulasPerPage,
+        };
+    },
+};
+</script>

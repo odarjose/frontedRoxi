@@ -1,10 +1,10 @@
 <template>
     <!-- component -->
-    <div class="bg-white p-8 max-h-max-screen rounded-md w-full">
+    <div class="bg-white p-8 rounded-md w-full">
         <div class="flex items-center justify-between pb-6">
             <div>
-                <h2 class="text-gray-600 font-semibold">Asignaciones</h2>
-                <span class="text-xs">Todas las asignaciones</span>
+                <h2 class="text-gray-600 font-semibold">Secciones</h2>
+                <span class="text-xs">Todas las secciones</span>
             </div>
             <div class="flex items-center justify-between">
                 <div class="flex bg-gray-50 items-center p-2 rounded-md">
@@ -41,7 +41,7 @@
                                 <th
                                     class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
                                 >
-                                    NOMBRE DEL DOCENTE
+                                    AULA
                                 </th>
                                 <th
                                     class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
@@ -51,21 +51,26 @@
                                 <th
                                     class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
                                 >
-                                    PERIODO ACADEMICO
+                                    GRADO
                                 </th>
                                 <th
                                     class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
                                 >
-                                    TURNO
+                                    PERIODO_ACADEMICO
+                                </th>
+
+                                <th
+                                    class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                                >
+                                    EDITAR
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr
-                                v-for="asignacion in asignacionPaginados"
-                                :key="asignacion.id"
-                                :data-id-seccion="asignacion.seccion_id"
-                                :data-id-docente="asignacion.docente_id"
+                                v-for="seccion in SeccionesPaginados"
+                                :key="seccion.id"
+                                :data-id-aula="seccion.aula_id"
                             >
                                 <td
                                     class="px-5 py-5 border-b border-gray-200 bg-white text-sm"
@@ -75,7 +80,7 @@
                                             <p
                                                 class="text-gray-900 whitespace-no-wrap"
                                             >
-                                                {{ asignacion.docente }}
+                                                {{ seccion.aula }}
                                             </p>
                                         </div>
                                     </div>
@@ -84,39 +89,39 @@
                                     class="px-5 py-5 border-b border-gray-200 bg-white text-sm"
                                 >
                                     <p class="text-gray-900 whitespace-no-wrap">
-                                        {{ asignacion.seccion }}
+                                        {{ seccion.seccion }}
                                     </p>
                                 </td>
                                 <td
                                     class="px-5 py-5 border-b border-gray-200 bg-white text-sm"
                                 >
                                     <p class="text-gray-900 whitespace-no-wrap">
-                                        {{ asignacion.periodo_academico }}
+                                        {{ seccion.grado }}
                                     </p>
                                 </td>
                                 <td
                                     class="px-5 py-5 border-b border-gray-200 bg-white text-sm"
                                 >
                                     <p class="text-gray-900 whitespace-no-wrap">
-                                        {{ asignacion.turno }}
+                                        {{ seccion.periodo_academico }}
                                     </p>
                                 </td>
 
-                                <td class="p-4 border-b border-blue-gray-50">
+                                <td class="p-4 border-b border-slate-200">
                                     <button
-                                        class="relative align-middle select-none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-blue-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30"
+                                        class="relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase text-slate-900 transition-all hover:bg-slate-900/10 active:bg-slate-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                                         type="button"
-                                        @click="editarAsignacion(asignacion)"
+                                        @click="editarSeccion(seccion)"
                                     >
                                         <span
-                                            class="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2"
+                                            class="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
                                         >
                                             <svg
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 viewBox="0 0 24 24"
                                                 fill="currentColor"
                                                 aria-hidden="true"
-                                                class="h-4 w-4"
+                                                class="w-4 h-4"
                                             >
                                                 <path
                                                     d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z"
@@ -132,50 +137,38 @@
             </div>
         </div>
     </div>
-
-    <div class="flex items-center justify-between mt-4">
-        <button
-            @click="currentPage--"
-            :disabled="currentPage <= 1"
-            class="flex items-center px-4 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
-        >
-            <span>Anterior</span>
-        </button>
-        <span class="mx-2">{{ currentPage }} de {{ totalPages }}</span>
-        <button
-            @click="currentPage++"
-            :disabled="currentPage >= totalPages"
-            class="flex items-center px-4 py-2 mr-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
-        >
-            <span>Siguiente</span>
-        </button>
-    </div>
 </template>
 
 <script lang="ts">
 import { ref, computed, onMounted } from "vue";
-import { useAsignacionStore } from "../../../store/asignacionStore";
-import type { ListAsignacionDocentes } from "../../../types/InterfaceDocentes";
+import { useAulaStore } from "../../../store/aulaStore";
+import { useSeccionesStore } from "../../../store/seccionStore";
+import type { Secciones } from "../../../types/InterfaceAulas";
 
 export default {
-    emits: ["editar-asignacion"],
+    emits: ["editar-secciones"],
     setup(props, { emit }) {
-        const asignacionStore = useAsignacionStore();
+        const aulaStore = useAulaStore();
+        const seccionStore = useSeccionesStore();
         const searchQuery = ref("");
         const currentPage = ref(1);
         const aulasPerPage = ref(5);
 
         onMounted(async () => {
-            await asignacionStore.ListarAsignacionesDocentes();
+            await aulaStore.ListarAulas();
         });
 
-        const filteredaula = computed(() => {
-            return asignacionStore.asignacion.filter((aula) => {
-                // Convertir el contenido de búsqueda a minúsculas para hacer la búsqueda insensible a mayúsculas y minúsculas
-                const query = searchQuery.value.toLowerCase();
-
-                // Verificar si alguna propiedad del cliente incluye la consulta
+        const filteredseccion = computed(() => {
+            // Verificamos si `seccionStore.seccion` es un arreglo
+            if (!Array.isArray(seccionStore.seccion)) {
+                return []; // Retorna un arreglo vacío si no es un arreglo
+            }
+            // Filtra las secciones en función de la búsqueda
+            return seccionStore.seccion.filter((aula) => {
+                const query = searchQuery.value.toLowerCase(); // Convertimos la consulta de búsqueda a minúsculas
+                // Busca coincidencias en cada valor de `aula`
                 return Object.values(aula).some((value) => {
+                    // Verifica que el valor sea una cadena antes de llamar a `toLowerCase`
                     if (typeof value === "string") {
                         return value.toLowerCase().includes(query);
                     }
@@ -185,28 +178,28 @@ export default {
         });
 
         const totalPages = computed(() => {
-            return Math.ceil(filteredaula.value.length / aulasPerPage.value);
+            return Math.ceil(filteredseccion.value.length / aulasPerPage.value);
         });
 
-        const asignacionPaginados = computed(() => {
+        const SeccionesPaginados = computed(() => {
             const start = (currentPage.value - 1) * aulasPerPage.value;
 
             const end = start + aulasPerPage.value;
 
-            return filteredaula.value.slice(start, end);
+            return filteredseccion.value.slice(start, end);
         });
 
-        const editarAsignacion = (aula: ListAsignacionDocentes) => {
+        const editarSeccion = (seccion: Secciones) => {
             // Emitir un evento con los datos del programa a editar
-            emit("editar-asignacion", aula);
+            emit("editar-secciones", seccion);
         };
 
         return {
-            asignacionStore,
+            aulaStore,
             searchQuery,
-            filteredaula,
-            editarAsignacion,
-            asignacionPaginados,
+            filteredseccion,
+            editarSeccion,
+            SeccionesPaginados,
             totalPages,
             currentPage,
             aulasPerPage,

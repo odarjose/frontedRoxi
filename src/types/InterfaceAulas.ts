@@ -7,6 +7,14 @@ export interface Aulas {
   capacidad: number;
   tipo: String;
 }
+export interface Secciones {
+  id: number;
+  aula_id: number;
+  aula: String;
+  seccion: String;
+  grado: number;
+  periodo_academico: number;
+}
 
 export interface Edificios {
   id: number;

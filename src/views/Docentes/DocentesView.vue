@@ -84,7 +84,7 @@ export default defineComponent({
             try {
                 await docentesStore.ListarDocentes();
             } catch (error) {
-                console.error("Error al cargar las categorias");
+                console.error("Error al cargar los docentes");
             }
         });
 

@@ -13,11 +13,9 @@
                     </th>
 
                     <th scope="col" class="px-6 py-4 font-bold text-gray-900">
-                        TIPO DOCENCIA
+                        DIRECCION
                     </th>
-                    <th scope="col" class="px-6 py-4 font-bold text-gray-900">
-                        TURNO
-                    </th>
+
                     <th
                         scope="col"
                         class="px-6 py-4 font-bold text-gray-900"
@@ -26,53 +24,42 @@
             </thead>
             <tbody class="divide-y divide-gray-100 border-t border-gray-100">
                 <tr
-                    v-for="docente in DocentesPaginados"
-                    :key="docente.id"
-                    :data-id-persona="docente.idpersona"
+                    v-for="edificio in edificioPaginados"
+                    :key="edificio.id"
                     class="hover:bg-gray-50"
                 >
                     <th class="flex gap-3 px-6 py-4 font-normal text-gray-900">
                         <div class="text-sm">
                             <div class="font-medium text-gray-700">
-                                {{ docente.nombre }}
+                                {{ edificio.nombre }}
                             </div>
-                            <div class="text-gray-400">{{ docente.email }}</div>
                         </div>
                     </th>
 
-                    <td class="px-6 py-4">{{ docente.tipo_docencia }}</td>
-                    <td class="px-6 py-4">
-                        <div class="flex gap-2">
+                    <td class="px-6 py-4">{{ edificio.direccion }}</td>
+
+                    <td class="p-4 border-b border-slate-200">
+                        <button
+                            class="relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase text-slate-900 transition-all hover:bg-slate-900/10 active:bg-slate-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                            type="button"
+                            @click="editarEdificio(edificio)"
+                        >
                             <span
-                                class="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-600"
-                            >
-                                {{ docente.turno }}
-                            </span>
-                        </div>
-                    </td>
-                    <td class="px-4 py-4">
-                        <div class="flex justify-center gap-4">
-                            <button
-                                x-data="{ tooltip: 'Edite' }"
-                                @click="editarDocente(docente)"
+                                class="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
                                     viewBox="0 0 24 24"
-                                    stroke-width="1.5"
-                                    stroke="currentColor"
-                                    class="h-6 w-6"
-                                    x-tooltip="tooltip"
+                                    fill="currentColor"
+                                    aria-hidden="true"
+                                    class="w-4 h-4"
                                 >
                                     <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
-                                    />
+                                        d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z"
+                                    ></path>
                                 </svg>
-                            </button>
-                        </div>
+                            </span>
+                        </button>
                     </td>
                 </tr>
             </tbody>
@@ -101,23 +88,23 @@
 
 <script lang="ts">
 import { ref, computed, onMounted } from "vue";
-import { useDocenteStore } from "../../../store/docenteStore";
-import type { ListDocente } from "../../../types/InterfaceDocentes";
+import { useEdificioStore } from "../../../store/edificioStore";
+import type { Edificios } from "../../../types/InterfaceAulas";
 
 export default {
-    emits: ["editar-docente"],
+    emits: ["editar-edificio"],
     setup(props, { emit }) {
-        const docenteStore = useDocenteStore();
+        const edificioStore = useEdificioStore();
         const searchQuery = ref("");
         const currentPage = ref(1);
         const aulasPerPage = ref(5);
 
         onMounted(async () => {
-            await docenteStore.ListarDocentes();
+            await edificioStore.ListarEdificios();
         });
 
         const filteredaula = computed(() => {
-            return docenteStore.docente.filter((aula) => {
+            return edificioStore.edificio.filter((aula) => {
                 // Convertir el contenido de búsqueda a minúsculas para hacer la búsqueda insensible a mayúsculas y minúsculas
                 const query = searchQuery.value.toLowerCase();
 
@@ -135,7 +122,7 @@ export default {
             return Math.ceil(filteredaula.value.length / aulasPerPage.value);
         });
 
-        const DocentesPaginados = computed(() => {
+        const edificioPaginados = computed(() => {
             const start = (currentPage.value - 1) * aulasPerPage.value;
 
             const end = start + aulasPerPage.value;
@@ -143,17 +130,17 @@ export default {
             return filteredaula.value.slice(start, end);
         });
 
-        const editarDocente = (docente: ListDocente) => {
+        const editarEdificio = (edificio: Edificios) => {
             // Emitir un evento con los datos del programa a editar
-            emit("editar-docente", docente);
+            emit("editar-edificio", edificio);
         };
 
         return {
-            docenteStore,
+            edificioStore,
             searchQuery,
             filteredaula,
-            editarDocente,
-            DocentesPaginados,
+            editarEdificio,
+            edificioPaginados,
             totalPages,
             currentPage,
             aulasPerPage,

@@ -15,7 +15,7 @@
                 size="py-2.5 px-4 mr-3 rounded-full text-justify text-xs font-bold"
                 icon="fas fa-user-plus"
                 class="mr-2"
-                @click="openModal"
+                @click="navigateToSecciones"
             />
             <Button
                 text="EDIFICIOS"
@@ -23,7 +23,7 @@
                 size="py-2.5 px-4 mr-3 rounded-full text-justify text-xs font-bold"
                 icon="fas fa-user-plus"
                 class="mr-2"
-                @click="openModal"
+                @click="navigateToEdificios"
             />
             <Button
                 text="RECURSOS"
@@ -80,10 +80,21 @@ export default defineComponent({
         const modalKey = ref(0);
         const aulaEditar = ref<Aulas | null>(null);
 
+        /* rutas */
+
         const router = useRouter();
         const navigateToRecursos = () => {
             router.push({ name: "recursos" }); // Redirige a la ruta 'home'
         };
+
+        const navigateToEdificios = () => {
+            router.push({ name: "edificios" });
+        };
+
+        const navigateToSecciones = () => {
+            router.push({ name: "secciones" });
+        };
+        /* fin rutass */
 
         const openModal = () => {
             aulaEditar.value = null;
@@ -127,6 +138,8 @@ export default defineComponent({
         return {
             modal,
             navigateToRecursos,
+            navigateToSecciones,
+            navigateToEdificios,
             showModal,
             modalKey,
             aulaEditar,

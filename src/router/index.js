@@ -11,6 +11,10 @@ import Prestamos from "@/views/Prestamos/PrestamosView.vue";
 import Usuarios from "@/views/Usuarios/UsuariosView.vue";
 import Categorias from "@/views/Categorias/CategoriasViews.vue";
 import Recursos from "../views/Recursos/RecursosView.vue";
+import Secciones from "../views/Secciones/SeccionesViews.vue";
+import Edificios from "../views/Edificios/EdificiosView.vue";
+import Mantenimiento from "../views/Mantenimiento/MantenimientoView.vue";
+
 /* inicio del manejador de rutas */
 
 const router = createRouter({
@@ -34,6 +38,11 @@ const router = createRouter({
           path: "/equipos",
           name: "equipos",
           component: Equipos,
+        },
+        {
+          path: "/mantenimiento",
+          name: "mantenimiento",
+          component: Mantenimiento,
         },
         {
           path: "/aulas",
@@ -69,6 +78,16 @@ const router = createRouter({
           path: "/recursos",
           name: "recursos",
           component: Recursos,
+        },
+        {
+          path: "/secciones",
+          name: "secciones",
+          component: Secciones,
+        },
+        {
+          path: "/edificios",
+          name: "edificios",
+          component: Edificios,
         },
       ],
     },

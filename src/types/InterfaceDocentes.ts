@@ -45,12 +45,39 @@ export interface AsignacionDocentes {
   turno: String;
 }
 
+export interface ListAsignacionDocentes {
+  id: number;
+  docente_id: number;
+  seccion_id: number;
+  docente: String;
+  seccion: String;
+  periodo_academico: number;
+  turno: String;
+}
+
 export interface Reservas {
   id: number;
   aula_id: number;
-  persona_id: number;
-  fecha_inicio: Date;
-  fecha_fin: Date;
+  docente_id: number;
+  fecha: Date;
+  hora_inicio: String;
+  hora_fin: String;
+  motivo: String;
+  evento: String;
+  estado: String;
+}
+
+export interface ListReservas {
+  id: number;
+  aula_id: number;
+  docente_id: number;
+  aula: String;
+  nombre: String;
+  apellidos: String;
+  dni: String;
+  fecha: Date;
+  hora_inicio: String;
+  hora_fin: String;
   motivo: String;
   evento: String;
   estado: String;

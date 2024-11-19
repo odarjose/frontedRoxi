@@ -13,79 +13,89 @@
             @click="openModal"
         />
     </div>
-
-    <FormModalPrestamo
+    <FormModalMantenimiento
         v-if="showModal"
         :key="modalKey"
-        :prestamos-editar="prestamosEditar"
+        :mantenimiento-editar="mantenimientoEditar"
         :show-modal="showModal"
         @update:show-modal="showModal = $event"
         @guardar="onGuardar"
         ref="modal"
     />
 
-    <TablePrestamo @editar-prestamo="editarPrestamo" />
+    <TableMantenimiento @editar-mantenimiento="editarMantenimiento" />
 </template>
-
 <script lang="ts">
 import { defineComponent, ref, onMounted } from "vue";
-import TablePrestamo from "./components/TablePrestamo.vue";
+import TableMantenimiento from "./components/TableMantenimiento.vue";
 import Button from "../../components/Button/ButtonComponnet.vue";
 
-import FormModalPrestamo from "./components/FormModalPrestamo.vue";
+import FormModalMantenimiento from "../Mantenimiento/components/FormModalMantenimiento.vue";
 
-import { usePrestamoStore } from "../../store/prestamosStore";
-import type { Prestamos, ListPrestamos } from "../../types/InterfaceEquipos";
+import { useMantenimientoEquipoStore } from "../../store/mantenimientoStore";
+import type {
+    ListMatemientoEquipos,
+    MantenimientoEquipos,
+} from "../../types/InterfaceEquipos";
 
 export default defineComponent({
     name: "ReservasViews",
     components: {
-        TablePrestamo,
+        TableMantenimiento,
         Button,
-        FormModalPrestamo,
+        FormModalMantenimiento,
     },
     setup() {
-        const prestamoStore = usePrestamoStore();
+        const mantenimientoStore = useMantenimientoEquipoStore();
         const modal = ref(null);
         const showModal = ref(false);
         const modalKey = ref(0);
-        const prestamosEditar = ref<Prestamos | null>(null);
+        const mantenimientoEditar = ref<MantenimientoEquipos | null>(null);
 
         const openModal = () => {
-            prestamosEditar.value = null;
+            mantenimientoEditar.value = null;
             showModal.value = true;
             modalKey.value++;
         };
         const closeModal = () => {
             showModal.value = false;
-            prestamosEditar.value = null;
+            mantenimientoEditar.value = null;
         };
-        const editarPrestamo = (prestamo: Prestamos) => {
-            prestamosEditar.value = JSON.parse(JSON.stringify(prestamo));
+        const editarMantenimiento = (mantenimiento: MantenimientoEquipos) => {
+            mantenimientoEditar.value = JSON.parse(
+                JSON.stringify(mantenimiento),
+            );
             showModal.value = true;
             modalKey.value++;
         };
 
-        const onGuardar = async (prestamo: Prestamos) => {
+        const onGuardar = async (mantenimiento: MantenimientoEquipos) => {
             try {
-                if (prestamo.id) {
-                    await prestamoStore.UpdatePrestamo(prestamo);
+                if (mantenimiento.id) {
+                    await mantenimientoStore.UpdatMatemientoEquipos(
+                        mantenimiento,
+                    );
                 } else {
-                    await prestamoStore.AddPrestamo(prestamo);
+                    await mantenimientoStore.AddMatemientoEquipos(
+                        mantenimiento,
+                    );
                 }
                 closeModal();
-                await prestamoStore.ListarPrestamos();
+                await mantenimientoStore.ListarMatemientoEquipos();
             } catch (error) {
-                console.error("Error al registrar la reserva: ", error);
+                console.error(
+                    "Error en el registro del mantenimiento: ",
+                    error,
+                );
             }
         };
 
         onMounted(async () => {
             try {
-                await prestamoStore.ListarPrestamos();
+                await mantenimientoStore.ListarMatemientoEquipos();
             } catch (error) {
                 console.error(
-                    "Error al cargar el listado de los prestamos del equipo",
+                    "Error al cargar el listado de los registros del mantenimiento",
                 );
             }
         });
@@ -94,9 +104,9 @@ export default defineComponent({
             modal,
             showModal,
             modalKey,
-            prestamosEditar,
+            mantenimientoEditar,
             openModal,
-            editarPrestamo,
+            editarMantenimiento,
             onGuardar,
         };
     },

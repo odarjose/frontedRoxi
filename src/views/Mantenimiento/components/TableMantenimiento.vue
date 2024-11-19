@@ -12,19 +12,22 @@
                         EQUIPO
                     </th>
                     <th scope="col" class="px-6 py-4 font-bold text-gray-900">
-                        DOCENTE
+                        FECHA DE MANTENIMIENTO
                     </th>
                     <th scope="col" class="px-6 py-4 font-bold text-gray-900">
-                        FECHA DE RETIRO
+                        NOMBRE DEL TECNICO
                     </th>
                     <th scope="col" class="px-6 py-4 font-bold text-gray-900">
-                        FECHA DE DEVOLUCION
+                        TELEFONO DEL TECNICO
                     </th>
                     <th scope="col" class="px-6 py-4 font-bold text-gray-900">
-                        ESTADO DE RETIRO
+                        TIPO DE MANTENIMIENTO
                     </th>
                     <th scope="col" class="px-6 py-4 font-bold text-gray-900">
-                        ESTADO DE DEVOLUCION
+                        DETALLES
+                    </th>
+                    <th scope="col" class="px-6 py-4 font-bold text-gray-900">
+                        COSTO (S/.)
                     </th>
 
                     <th
@@ -35,25 +38,25 @@
             </thead>
             <tbody class="divide-y divide-gray-100 border-t border-gray-100">
                 <tr
-                    v-for="prestamo in prestamosPaginados"
-                    :key="prestamo.id"
-                    :data-id-docente="prestamo.docente_id"
-                    :data-id-equipo="prestamo.equipo_id"
+                    v-for="mantenimiento in mantenimientoPaginados"
+                    :key="mantenimiento.id"
+                    :data-id-equipo="mantenimiento.equipo_id"
                     class="hover:bg-gray-50"
                 >
-                    <td class="px-6 py-4">{{ prestamo.equipo }}</td>
-                    <th class="flex gap-3 px-6 py-4 font-normal text-gray-900">
+                    <td class="px-6 py-4">{{ mantenimiento.equipo }}</td>
+                    <th class="px-6 py-4">
                         <div class="text-sm">
                             <div class="font-medium text-gray-700">
-                                {{ prestamo.nombre }}
-                            </div>
-                            <div class="text-gray-400">
-                                {{ prestamo.apellido }}
+                                {{ mantenimiento.fecha_mantenimiento }}
                             </div>
                         </div>
                     </th>
-                    <td class="px-6 py-4">{{ prestamo.fecha_retiro }}</td>
-                    <td class="px-6 py-4">{{ prestamo.fecha_devolucion }}</td>
+                    <td class="px-6 py-4">
+                        {{ mantenimiento.nombre_tecnico }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ mantenimiento.telefono_tecnico }}
+                    </td>
                     <td class="px-6 py-4">
                         <span
                             class="inline-flex items-center gap-1 rounded-full bg-green-50 px-2 py-1 text-xs font-semibold text-green-600"
@@ -61,7 +64,7 @@
                             <span
                                 class="h-1.5 w-1.5 rounded-full bg-green-600"
                             ></span>
-                            {{ prestamo.estado_retiro }}
+                            {{ mantenimiento.tipo_mantenimiento }}
                         </span>
                     </td>
                     <td class="px-6 py-4">
@@ -71,15 +74,18 @@
                             <span
                                 class="h-1.5 w-1.5 rounded-full bg-green-600"
                             ></span>
-                            {{ prestamo.estado_devolucion }}
+                            {{ mantenimiento.detalles }}
                         </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ mantenimiento.costo }}
                     </td>
 
                     <td class="px-6 py-4">
                         <div class="flex justify-end gap-4">
                             <button
                                 x-data="{ tooltip: 'Edite' }"
-                                @click="editarPrestamo(prestamo)"
+                                @click="editarMantenimiento(mantenimiento)"
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -107,23 +113,23 @@
 
 <script lang="ts">
 import { ref, computed, onMounted } from "vue";
-import { usePrestamoStore } from "../../../store/prestamosStore";
-import type { ListPrestamos } from "../../../types/InterfaceEquipos";
+import { useMantenimientoEquipoStore } from "../../../store/mantenimientoStore";
+import type { ListMatemientoEquipos } from "../../../types/InterfaceEquipos";
 
 export default {
-    emits: ["editar-prestamo"],
+    emits: ["editar-mantenimiento"],
     setup(props, { emit }) {
-        const prestamoStore = usePrestamoStore();
+        const mantenimientoStore = useMantenimientoEquipoStore();
         const searchQuery = ref("");
         const currentPage = ref(1);
         const aulasPerPage = ref(5);
 
         onMounted(async () => {
-            await prestamoStore.ListarPrestamos();
+            await mantenimientoStore.ListarMatemientoEquipos();
         });
 
         const filteredaula = computed(() => {
-            return prestamoStore.prestamo.filter((aula) => {
+            return mantenimientoStore.mantenimiento.filter((aula) => {
                 // Convertir el contenido de búsqueda a minúsculas para hacer la búsqueda insensible a mayúsculas y minúsculas
                 const query = searchQuery.value.toLowerCase();
 
@@ -141,7 +147,7 @@ export default {
             return Math.ceil(filteredaula.value.length / aulasPerPage.value);
         });
 
-        const prestamosPaginados = computed(() => {
+        const mantenimientoPaginados = computed(() => {
             const start = (currentPage.value - 1) * aulasPerPage.value;
 
             const end = start + aulasPerPage.value;
@@ -149,17 +155,17 @@ export default {
             return filteredaula.value.slice(start, end);
         });
 
-        const editarPrestamo = (prestamo: ListPrestamos) => {
+        const editarMantenimiento = (mantenimiento: ListMatemientoEquipos) => {
             // Emitir un evento con los datos del programa a editar
-            emit("editar-prestamo", prestamo);
+            emit("editar-mantenimiento", mantenimiento);
         };
 
         return {
-            prestamoStore,
+            mantenimientoStore,
             searchQuery,
             filteredaula,
-            editarPrestamo,
-            prestamosPaginados,
+            editarMantenimiento,
+            mantenimientoPaginados,
             totalPages,
             currentPage,
             aulasPerPage,

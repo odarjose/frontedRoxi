@@ -38,10 +38,47 @@ export interface HistorialMantenimineto {
   detalles: String;
 }
 
+export interface Prestamos {
+  id: number;
+  equipo_id: number;
+  docente_id: number;
+  fecha_retiro: Date;
+  fecha_devolucion: Date;
+  estado_retiro: String;
+  estado_devolucion: String;
+  observaciones: String;
+}
+
+export interface ListPrestamos {
+  id: number;
+  equipo_id: number;
+  docente_id: number;
+  nombre: String;
+  apellido: String;
+  equipo: String;
+  fecha_retiro: Date;
+  fecha_devolucion: Date;
+  estado_retiro: String;
+  estado_devolucion: String;
+  observaciones: String;
+}
+
 export interface MantenimientoEquipos {
   id: number;
-  persona_id: number;
   equipo_id: number;
+  fecha_mantenimiento: Date;
+  nombre_tecnico: string;
+  telefono_tecnico: string;
+  tipo_mantenimiento: String;
+  detalles: String;
+  costo: number;
+}
+export interface ListMatemientoEquipos {
+  id: number;
+  equipo_id: number;
+  nombre_tecnico: string;
+  telefono_tecnico: string;
+  equipo: String;
   fecha_mantenimiento: Date;
   tipo_mantenimiento: String;
   detalles: String;

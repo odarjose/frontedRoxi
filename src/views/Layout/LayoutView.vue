@@ -9,12 +9,12 @@ const isSidebarOpen = ref(false);
 </script>
 
 <template>
-    <div class="flex">
+    <div class="flex bg-gray-200">
         <SidebarComponent :isSidebarOpen="isSidebarOpen" />
 
-        <div class="flex-1">
+        <div class="flex-1 bg-gray-200">
             <HeaderComponent :isSidebarOpen="isSidebarOpen" />
-            <main class="ml-16 flex-1 overflow-auto">
+            <main class="ml-16 flex-1 bg-gray-200 overflow-auto">
                 <RouterView></RouterView>
             </main>
         </div>

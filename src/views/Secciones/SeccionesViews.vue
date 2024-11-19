@@ -3,101 +3,102 @@
         <Button
             text="IMPORTAR"
             color="border border-slate-300 text-slate-600"
-            size="py-2.5 px-3 mr-3 rounded-full text-xs font-bold"
+            size="py-2.5 px-3 mr-3 rounded-full px-4 text-xs font-bold"
         />
+
         <Button
-            text="AGREGAR RESERVAS"
+            text="AGREGAR SECCIONES"
             color="bg-cyan-300 text-gray-800 hover:text-black hover:bg-green-200"
             size="py-2.5 px-4 mr-3 rounded-full text-justify text-xs font-bold"
             icon="fas fa-user-plus"
             @click="openModal"
         />
     </div>
-
-    <FormModalReservas
+    <FormModalSecciones
         v-if="showModal"
         :key="modalKey"
-        :reservas-editar="reservaEditar"
+        :seccion-editar="seccionEditar"
         :show-modal="showModal"
         @update:show-modal="showModal = $event"
         @guardar="onGuardar"
         ref="modal"
     />
-
     <div class="pt-4">
-        <TableReservas @editar-reserva="editarReserva" />
+        <TableSecciones @editar-secciones="editarSeccion" />
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, onMounted } from "vue";
-import TableReservas from "./components/TableReservas.vue";
+
+import TableSecciones from "./components/TableSecciones.vue";
+
 import Button from "../../components/Button/ButtonComponnet.vue";
+import FormModalSecciones from "../Secciones/components/FormModalSecciones.vue";
 
-import FormModalReservas from "./components/FormModalReservas.vue";
-
-import { useReservasStore } from "../../store/reservasStore";
-
-import type { Reservas } from "../../types/InterfaceDocentes";
+import { useSeccionesStore } from "../../store/seccionStore";
+import type { Secciones } from "../../types/InterfaceAulas";
 
 export default defineComponent({
-    name: "ReservasViews",
+    name: "SeccionesView",
     components: {
-        TableReservas,
         Button,
-        FormModalReservas,
+        TableSecciones,
+        FormModalSecciones,
     },
     setup() {
-        const reservaStore = useReservasStore();
+        const seccionStore = useSeccionesStore();
         const modal = ref(null);
         const showModal = ref(false);
         const modalKey = ref(0);
-        const reservaEditar = ref<Reservas | null>(null);
+        const seccionEditar = ref<Secciones | null>(null);
 
         const openModal = () => {
-            reservaEditar.value = null;
+            showModal.value = false;
             showModal.value = true;
-            modalKey.value++;
+            seccionEditar.value = null;
         };
         const closeModal = () => {
             showModal.value = false;
-            reservaEditar.value = null;
+            seccionEditar.value = null;
         };
-        const editarReserva = (reserva: Reservas) => {
-            reservaEditar.value = JSON.parse(JSON.stringify(reserva));
+
+        const editarSeccion = (seccion: Secciones) => {
+            seccionEditar.value = JSON.parse(JSON.stringify(seccion));
             showModal.value = true;
             modalKey.value++;
         };
 
-        const onGuardar = async (reserva: Reservas) => {
+        const onGuardar = async (seccion: Secciones) => {
             try {
-                if (reserva.id) {
-                    await reservaStore.UpdatReservas(reserva);
+                if (seccion.id) {
+                    await seccionStore.UpdatSecciones(seccion);
                 } else {
-                    await reservaStore.AddReservas(reserva);
+                    await seccionStore.AddSecciones(seccion);
                 }
                 closeModal();
-                await reservaStore.ListarReservas();
+                await seccionStore.ListarSecciones();
             } catch (error) {
-                console.error("Error al registrar la reserva: ", error);
+                console.error("Error al guardar la seccion: ", error);
             }
         };
 
         onMounted(async () => {
             try {
-                await reservaStore.ListarReservas();
+                await seccionStore.ListarSecciones();
             } catch (error) {
-                console.error("Error al cargar las reservas");
+                console.error("Error al cargar las secciones");
             }
         });
 
         return {
             modal,
+
             showModal,
             modalKey,
-            reservaEditar,
+            seccionEditar,
             openModal,
-            editarReserva,
+            editarSeccion,
             onGuardar,
         };
     },
