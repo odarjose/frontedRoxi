@@ -10,6 +10,11 @@ export interface Equipos {
   asignado_a: number;
   ubicacion: String;
 }
+export interface ReportesEquipos {
+  mes: number;
+  estado: String;
+  cantidad: number;
+}
 export interface ListEquipos {
   id: number;
   nombre: String;

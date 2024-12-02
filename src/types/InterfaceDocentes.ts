@@ -18,6 +18,13 @@ export interface Docentes {
   turno: String;
 }
 
+export interface ReportDocentes {
+  seccion: String;
+  turno: String;
+  periodo_academico: number;
+  cantidad: number;
+}
+
 export interface ListDocente {
   nombre: String;
   apellido: String;
@@ -51,6 +58,7 @@ export interface ListAsignacionDocentes {
   seccion_id: number;
   docente: String;
   seccion: String;
+  aula: String;
   periodo_academico: number;
   turno: String;
 }

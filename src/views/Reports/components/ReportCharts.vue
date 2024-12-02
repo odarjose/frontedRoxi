@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { onMounted } from "vue";
+import { onMounted, watch } from "vue";
 import Chart from "chart.js/auto";
 
 export default {
@@ -40,9 +40,11 @@ export default {
         },
     },
     setup(props) {
-        onMounted(() => {
+        let chart = null;
+
+        const createChart = () => {
             const ctx = document.getElementById(props.chartId).getContext("2d");
-            new Chart(ctx, {
+            chart = new Chart(ctx, {
                 type: props.chartType, // Aquí se define el tipo de gráfico
                 data: {
                     labels: props.labels,
@@ -61,7 +63,25 @@ export default {
                     responsive: true,
                 },
             });
+        };
+
+        const updateChart = () => {
+            if (chart) {
+                chart.data.labels = props.labels;
+                chart.data.datasets[0].data = props.data;
+                chart.data.datasets[0].backgroundColor = props.backgroundColor;
+                chart.data.datasets[0].borderColor = props.borderColor;
+                chart.update();
+            }
+        };
+
+        onMounted(() => {
+            createChart();
         });
+
+        watch(() => props.data, updateChart);
+
+        return {};
     },
 };
 </script>
